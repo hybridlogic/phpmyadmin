@@ -231,6 +231,25 @@ $(document).ready(function(){
         }
     });
 
+    /* Jump to recent table */
+    $('#timeMachineSnapshot').change(function() {
+        var arr = this.value;
+        var snapshot = this.value;
+        $.post('navigation.php', {
+            'token': window.parent.token,
+            'server': window.parent.server,
+            'ajax_request': true,
+            'time_machine': true,
+            'snapshot': snapshot},
+        function(data) {
+            if (data.success == true) {
+                // window.parent.refreshMain($('#LeftDefaultTabTable')[0].value);
+                window.parent.refreshMain();
+                window.parent.refreshNavigation();
+            }
+        });
+    });
+
     /* Create table */
     $('#newtable a.ajax').click(function(event){
         event.preventDefault();

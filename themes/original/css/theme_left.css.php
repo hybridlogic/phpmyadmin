@@ -85,6 +85,15 @@ div#recentTableList select {
     width: 100%;
 }
 
+div#timeMachineNav {
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+div#timeMachineNav select {
+    width: 100%;
+}
+
 div#pmalogo,
 div#leftframelinks,
 div#databaseList {

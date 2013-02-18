@@ -24,12 +24,22 @@ function PMA_exitNavigationFrame()
 
 require_once './libraries/common.lib.php';
 require_once './libraries/RecentTable.class.php';
+require_once './hybridcluster/TimeMachine.class.php';
+require_once './hybridcluster/TimeMachineNav.class.php';
 
 /**
  * Check if it is an ajax request to reload the recent tables list.
  */
 if ($GLOBALS['is_ajax_request'] && $_REQUEST['recent_table']) {
     PMA_ajaxResponse('', true, array('options' => PMA_RecentTable::getInstance()->getHtmlSelectOption()) );
+}
+
+/**
+ * Check if it is an ajax request to go back in time
+ */
+if ($GLOBALS['is_ajax_request'] && isset($_REQUEST['snapshot'])) {
+    require_once './hybridcluster/TimeMachine.class.php';
+    HC_TimeMachine::getInstance()->handleChangeSnapshot($_REQUEST['snapshot']);
 }
 
 // keep the offset of the db list in session before closing it
@@ -161,6 +171,20 @@ require_once './libraries/header_http.inc.php';
 <?php
 require './libraries/navigation_header.inc.php';
 
+// Show the time machine nav
+?>
+<div id="timeMachineNav">
+    <form method="post" action="index.php" target="_parent">
+        <?php
+        echo PMA_generate_common_hidden_inputs();
+        echo HC_TimeMachineNav::getInstance()->getHtmlSelect();
+        ?>
+        <noscript>
+        <input type="submit" name="Go" value="' . __('Go') . '" />
+        </noscript>
+    </form>
+</div>
+<?php
 // display recently used tables
 if ($GLOBALS['cfg']['LeftRecentTable'] > 0) {
     echo '<div id="recentTableList">' . "\n"

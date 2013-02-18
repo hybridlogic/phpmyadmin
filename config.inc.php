@@ -49,6 +49,7 @@ $cfg['Servers'][$i]['bs_temp_blob_timeout'] = 600;
 $cfg['Servers'][$i]['bs_temp_log_threshold'] = '32M';
 // This doesn't seem to have any effect on the SSL :443 bug
 $cfg['ForceSSL']=FALSE;
+
 /* User for advanced features */
 // $cfg['Servers'][$i]['controluser'] = 'pma';
 // $cfg['Servers'][$i]['controlpass'] = 'pmapass';

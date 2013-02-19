@@ -50,7 +50,14 @@ class HC_TimeMachine {
      */
     public function handleChangeSnapshot($snapshot) {
         global $cfg;
-        $cfg['Server']['user'] = strlen($snapshot) ? "{$this->user}#{$snapshot}" : $this->user;
+        if (strlen($snapshot)) {
+            $cfg['Server']['user'] = strlen($snapshot) ? "{$this->user}#{$snapshot}" : $this->user;
+            list($timestampInMS) = explode("_", $snapshot);
+            $datetime = date("YmdHis", $timestampInMS/1000);
+            $new_database = "{$this->user}_{$datetime}";
+        } else {
+            $new_database = $cfg['Server']['user'] = $this->user;
+        }
 
         # In order to change the login username we must change the single
         # signon values
@@ -68,6 +75,7 @@ class HC_TimeMachine {
         session_start();
 
         $_SESSION['PMA_single_signon_user'] = $cfg['Server']['user'];
+        $_SESSION['PMA_single_signon_cfgupdate'] = Array("only_db" => $new_database);
 
         session_write_close();
 
@@ -81,6 +89,6 @@ class HC_TimeMachine {
         }
         session_start();
 
-        PMA_ajaxResponse('');
+        PMA_ajaxResponse('', true, Array("db" => $new_database));
     }
 }

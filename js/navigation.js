@@ -243,9 +243,8 @@ $(document).ready(function(){
             'snapshot': snapshot},
         function(data) {
             if (data.success == true) {
-                // window.parent.refreshMain($('#LeftDefaultTabTable')[0].value);
-                window.parent.refreshMain();
-                window.parent.refreshNavigation();
+                window.parent.setDb(data.db)
+            window.parent.refreshMain();
             }
         });
     });

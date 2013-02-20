@@ -16,6 +16,8 @@ class HC_TimeMachineNav {
      */
     private static $_instance;
 
+    private $disabled = false;
+
     public function __construct() {
         $this->current_login_user = $GLOBALS['cfg']['Server']['user'];
         $this->user = $this->getUsername($this->current_login_user);
@@ -34,6 +36,8 @@ class HC_TimeMachineNav {
             $snapshots = array_reverse($snapshots);
         } catch (HybridClusterAPIInternalException $e) {
             $snapshots = Array();
+        } catch (Exception $e) {
+            $this->disabled = true;
         }
 
         $this->snapshots = $snapshots;
@@ -101,8 +105,8 @@ class HC_TimeMachineNav {
      *
      * @return string
      */
-    public function getHtmlSelect()
-    {
+    public function getHtmlSelect() {
+        if ($this->disabled) return '';
         $html  = '<input type="hidden" name="goto" id="LeftDefaultTabTable" value="' .
                          htmlspecialchars($GLOBALS['cfg']['LeftDefaultTabTable']) . '" />';
         $html .= '<select name="selected_time_machine_snapshot" id="timeMachineSnapshot">';
